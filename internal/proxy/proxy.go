@@ -1,10 +1,8 @@
 package proxy
 
 import (
-	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"time"
 
 	"go-chaos/internal/config"
 )
@@ -18,13 +16,7 @@ func NewReverseProxy(cfg config.Config) (*httputil.ReverseProxy, error) {
 	proxy := httputil.NewSingleHostReverseProxy(target)
 
 	// Transport with sane defaults.
-	proxy.Transport = &http.Transport{
-		Proxy:                 http.ProxyFromEnvironment,
-		MaxIdleConns:          100,
-		IdleConnTimeout:       90 * time.Second,
-		TLSHandshakeTimeout:   10 * time.Second,
-		ExpectContinueTimeout: 1 * time.Second,
-	}
+	proxy.Transport = NewTransport()
 
 	return proxy, nil
 }
