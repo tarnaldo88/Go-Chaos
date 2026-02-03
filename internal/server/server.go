@@ -20,7 +20,7 @@ func New(cfg *config.Store, log *observability.Logger) Server {
 	s := &Server{
 		cfg: cfg,
 		log: log,
-		mux: http.NewServerMux(),
+		mux: http.NewServeMux(),
 	}
 
 	p, err := proxy.NewReverseProxy(cfg.Get())

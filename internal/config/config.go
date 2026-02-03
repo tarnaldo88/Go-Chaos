@@ -95,3 +95,7 @@ func (s *Store) Set(cfg Config) error {
 	s.v.Store(cfg)
 	return nil
 }
+
+func (s *Store) Get() Config {
+	return s.v.Load().(Config)
+}
