@@ -20,14 +20,12 @@ func Middleware(store Store, log *observability.Logger, next http.Handler) http.
 			return
 		}
 
-		if cfg.Chaos.LatencyMs > 0 {
+		// latency
+		if d, ok := MaybeSleep(cfg); ok {
 			if log != nil {
-				log.Printf("chaos latency=%dms path=%s", cfg.Chaos.LatencyMs, r.URL.Path)
+				log.Printf("chaos latency=%dms path=%s", d.Milliseconds(), r.URL.Path)
 			}
 		}
-
-		// latency
-		MaybeSleep(cfg)
 
 		// error response
 		if MaybeReturnError(cfg, w) {
