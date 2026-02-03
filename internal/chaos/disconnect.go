@@ -24,7 +24,6 @@ func MaybeDisconnect(cfg config.Config, w http.ResponseWriter) bool {
 	return false
 }
 
-
-func CloseConn(c.net.Conn) {
+func CloseConn(c net.Conn) {
 	_ = c.Close()
 }
