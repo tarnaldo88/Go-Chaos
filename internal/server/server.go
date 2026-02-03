@@ -1,12 +1,14 @@
 package server
 
-// import (
-// 	"io"
-// 	"net/http"
+import (
+	"io"
+	"net/http"
 
-// 	"go-chaos/internal/config"
-// 	"go-chaos/internal/observability"
-// )
+	"go-chaos/internal/chaos"
+	"go-chaos/internal/config"
+	"go-chaos/internal/observability"
+	"go-chaos/internal/proxy"
+)
 
 type Server struct {
 	cfg *config.Store
@@ -21,6 +23,13 @@ func New(cfg *config.Store, log *observability.Logger) Server {
 		mux: http.NewServerMux(),
 	}
 
+	p, err := proxy.NewReverseProxy(cfg.Get())
+
+	if err != nil {
+		panic(err)
+	}
+	s.proxy = chaos.Middleware(cfg, p)
+
 	s.routes()
 	return s
 }
@@ -28,7 +37,8 @@ func New(cfg *config.Store, log *observability.Logger) Server {
 func (s *Server) routes() {
 	s.mux.HandleFunc("/admin/config", s.handleConfigUpdate)
 	s.mux.HandleFunc("/healthz", s.handleHealth)
-	// TODO: add proxy handler (wrap with chaos middleware)
+
+	s.mux.Handle("/", s.proxy)
 }
 
 func (s *Server) Handler() http.Handler {
