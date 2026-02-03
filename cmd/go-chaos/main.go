@@ -8,9 +8,12 @@ import (
 	"go-chaos/internal/config"
 	"go-chaos/internal/observability"
 	"go-chaos/internal/server"
+	"math/rand"
+	"time"
 )
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
 	configPath := flag.String("config", "config/config.yaml", "path to config file")
 	flag.Parse()
 
