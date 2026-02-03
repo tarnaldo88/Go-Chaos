@@ -1,7 +1,8 @@
 # Go Chaos
-![Go Chaos](images/GoChaosLogo.png)
 
-Go Chaos is a reverse proxy that injects controlled failures and latency into HTTP traffic to validate API resilience. It supports live configuration updates, per-route rules, and transport-level failures such as DNS errors and upstream timeouts.
+<img src="images/GoChaosLogo.png" alt="Go Chaos Logo" width="150">
+
+Go Chaos is a reverse proxy that injects controlled failures and latency into HTTP traffic to validate API resilience. It supports live configuration updates, per-route rules, transport-level failures, and a built-in admin UI.
 
 ## Features
 - HTTP reverse proxy with configurable target
@@ -9,7 +10,7 @@ Go Chaos is a reverse proxy that injects controlled failures and latency into HT
 - Transport-level chaos: DNS failures and upstream timeouts
 - Per-route rules with include and exclude path prefixes
 - Live config updates via admin API
-- Built-in admin UI
+- Built-in admin UI for live tuning
 
 ## Requirements
 - Go 1.22 or later
@@ -34,6 +35,7 @@ chaos:
   exclude_paths:
     - "/healthz"
     - "/admin/"
+    - "/images/"
 ```
 
 ### 2) Build and run
@@ -57,6 +59,10 @@ http://localhost:8080/admin
 ```
 http://localhost:8080/healthz
 ```
+
+## Admin UI Screenshot
+
+<img src="images/AdminPage.png" alt="Go Chaos Admin Page" width="450">
 
 ## Configuration
 
@@ -98,6 +104,22 @@ curl -X POST http://localhost:8080/admin/config \
   -H "Content-Type: application/x-yaml" \
   --data-binary @config/config.yaml
 ```
+
+## Admin UI
+
+The UI allows live editing of all chaos settings without restarting the server.
+
+- Load current config from the server
+- Edit key fields in a form
+- Sync raw YAML and form values
+- Validate inputs before saving
+
+## Static Assets
+
+If you serve a favicon or logo locally, add routes for them and exclude from chaos:
+
+- Serve: `/images/*` or `/favicon.ico`
+- Exclude: `/images/` and `/favicon.ico`
 
 ## Tests
 ```bash
