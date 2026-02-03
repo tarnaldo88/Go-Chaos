@@ -1,5 +1,7 @@
 package config
 
+import "os"
+
 // import(
 // 	"errors"
 // 	"io"
@@ -31,4 +33,13 @@ func Default() Config {
 			LatencyMs:      0,
 		},
 	}
+}
+
+func LoadFromFile(path string) (Config, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return Config{}, err
+	}
+	defer f.Close()
+	return decodeYAML(f)
 }
