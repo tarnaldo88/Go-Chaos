@@ -17,9 +17,11 @@ type Config struct {
 }
 
 type ChaosConfig struct {
-	ErrorRate      float64 `yaml:"error_rate"`
-	DisconnectRate float64 `yaml:"disconnect_rate"`
-	LatencyMs      int     `yaml:"latency_ms"`
+	ErrorRate      float64  `yaml:"error_rate"`
+	DisconnectRate float64  `yaml:"disconnect_rate"`
+	LatencyMs      int      `yaml:"latency_ms"`
+	LatencyMinMs   int      `yaml:"latency_min_ms"`
+	LatencyMaxMs   int      `yaml:"latency_max_ms"`
 	IncludePaths   []string `yaml:"include_paths"`
 	ExcludePaths   []string `yaml:"exclude_paths"`
 }
@@ -32,6 +34,8 @@ func Default() Config {
 			ErrorRate:      0.0,
 			DisconnectRate: 0.0,
 			LatencyMs:      0,
+			LatencyMinMs:   0,
+			LatencyMaxMs:   0,
 			IncludePaths:   nil,
 			ExcludePaths:   []string{"/healthz", "/admin/"},
 		},
@@ -78,6 +82,12 @@ func (c Config) Validate() error {
 	}
 	if c.Chaos.LatencyMs < 0 {
 		return errors.New("chaos.latency_ms must be >= 0")
+	}
+	if c.Chaos.LatencyMinMs < 0 || c.Chaos.LatencyMaxMs < 0 {
+		return errors.New("chaos.latency_min_ms and chaos.latency_max_ms must be >= 0")
+	}
+	if c.Chaos.LatencyMaxMs < c.Chaos.LatencyMinMs {
+		return errors.New("chaos.latency_max_ms must be >= chaos.latency_min_ms")
 	}
 	for _, p := range c.Chaos.IncludePaths {
 		if p == "" || p[0] != '/' {
