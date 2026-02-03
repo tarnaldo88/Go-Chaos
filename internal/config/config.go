@@ -82,3 +82,9 @@ func (c Config) Validate() error {
 type Store struct {
 	v atomic.Value
 }
+
+func NewStore(cfg Config) *Store {
+	s := &Store{}
+	s.v.Store(cfg)
+	return s
+}
