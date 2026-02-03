@@ -22,6 +22,8 @@ type ChaosConfig struct {
 	LatencyMs      int      `yaml:"latency_ms"`
 	LatencyMinMs   int      `yaml:"latency_min_ms"`
 	LatencyMaxMs   int      `yaml:"latency_max_ms"`
+	UpstreamTimeoutRate float64 `yaml:"upstream_timeout_rate"`
+	DNSFailureRate      float64 `yaml:"dns_failure_rate"`
 	IncludePaths   []string `yaml:"include_paths"`
 	ExcludePaths   []string `yaml:"exclude_paths"`
 }
@@ -36,6 +38,8 @@ func Default() Config {
 			LatencyMs:      0,
 			LatencyMinMs:   0,
 			LatencyMaxMs:   0,
+			UpstreamTimeoutRate: 0.0,
+			DNSFailureRate:      0.0,
 			IncludePaths:   nil,
 			ExcludePaths:   []string{"/healthz", "/admin/"},
 		},
@@ -79,6 +83,12 @@ func (c Config) Validate() error {
 	}
 	if c.Chaos.DisconnectRate < 0 || c.Chaos.DisconnectRate > 1 {
 		return errors.New("chaos.disconnect_rate must be 0.0-1.0")
+	}
+	if c.Chaos.UpstreamTimeoutRate < 0 || c.Chaos.UpstreamTimeoutRate > 1 {
+		return errors.New("chaos.upstream_timeout_rate must be 0.0-1.0")
+	}
+	if c.Chaos.DNSFailureRate < 0 || c.Chaos.DNSFailureRate > 1 {
+		return errors.New("chaos.dns_failure_rate must be 0.0-1.0")
 	}
 	if c.Chaos.LatencyMs < 0 {
 		return errors.New("chaos.latency_ms must be >= 0")
