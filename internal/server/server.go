@@ -31,7 +31,7 @@ func New(cfg *config.Store, log *observability.Logger) *Server {
 	if err != nil {
 		panic(err)
 	}
-	s.proxy = chaos.Middleware(cfg, p)
+	s.proxy = chaos.Middleware(cfg, log, p)
 
 	s.routes()
 	return s
