@@ -43,3 +43,19 @@ func LoadFromFile(path string) (Config, error) {
 	defer f.Close()
 	return decodeYAML(f)
 }
+
+func LoadFromBytes(b []byte) (Config, error) {
+	return decodeYAML(strings.NewReader(string(b)))
+}
+
+func decodeYAML(r io.Reader) (Config, error) {
+	cfg := Default()
+	dec := yaml.NewDecoder(r)
+	if err := dec.Decode(&cfg); err != nil {
+		return Config{}, err
+	}
+	if err := cfg.Validate(); err != nil {
+		return Config{}, err
+	}
+	return cfg, nil
+}
