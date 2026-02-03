@@ -62,7 +62,7 @@ http://localhost:8080/healthz
 
 ## Admin UI Screenshot
 
-<img src="images/AdminPage.png" alt="Go Chaos Admin Page" width="450">
+<img src="images/AdminPage.png" alt="Go Chaos Admin Page" width="750">
 
 ## Configuration
 
