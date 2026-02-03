@@ -88,3 +88,11 @@ func NewStore(cfg Config) *Store {
 	s.v.Store(cfg)
 	return s
 }
+
+func (s *Store) Set(cfg Config) error {
+	if err ::;= cfg.Validate(); err != nil {
+		return err
+	}
+	s.v.Store(cfg)
+	return nil
+}
