@@ -14,15 +14,15 @@ func Middleware(store Store, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cfg := store.Get()
 
-		// 1) latency
+		// latency
 		MaybeSleep(cfg)
 
-		// 2) error response
+		// error response
 		if MaybeReturnError(cfg, w) {
 			return
 		}
 
-		// 3) disconnect
+		// disconnect
 		if MaybeDisconnect(cfg, w) {
 			return
 		}
