@@ -28,7 +28,9 @@ func TestLatencyInjection(t *testing.T) {
 
 	cfg := config.Default()
 	cfg.TargetURL = upstream.URL
-	cfg.Chaos.LatencyMs = 150
+	cfg.Chaos.LatencyMs = 0
+	cfg.Chaos.LatencyMinMs = 100
+	cfg.Chaos.LatencyMaxMs = 300
 
 	proxy := newTestServer(t, cfg)
 	defer proxy.Close()
@@ -41,8 +43,11 @@ func TestLatencyInjection(t *testing.T) {
 	_ = resp.Body.Close()
 
 	elapsed := time.Since(start)
-	if elapsed < 140*time.Millisecond {
-		t.Fatalf("expected latency >= 140ms, got %v", elapsed)
+	if elapsed < 90*time.Millisecond {
+		t.Fatalf("expected latency >= 90ms, got %v", elapsed)
+	}
+	if elapsed > 800*time.Millisecond {
+		t.Fatalf("expected latency <= 800ms, got %v", elapsed)
 	}
 }
 
