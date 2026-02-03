@@ -1,0 +1,11 @@
+listen_addr: ":8080"
+target_url: "http://localhost:9000"
+chaos:
+  error_rate: 0.05
+  disconnect_rate: 0.02
+  latency_ms: 250
+
+# EXAMPLE to update are runtime
+  # curl -X POST http://localhost:8080/admin/config \
+  # -H "Content-Type: application/x-yaml" \
+  # --data-binary @config/config.yaml
