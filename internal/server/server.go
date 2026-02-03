@@ -8,6 +8,8 @@ import (
 	"go-chaos/internal/config"
 	"go-chaos/internal/observability"
 	"go-chaos/internal/proxy"
+
+	"gopkg.in/yaml.v3"
 )
 
 type Server struct {
@@ -36,7 +38,7 @@ func New(cfg *config.Store, log *observability.Logger) *Server {
 }
 
 func (s *Server) routes() {
-	s.mux.HandleFunc("/admin/config", s.handleConfigUpdate)
+	s.mux.HandleFunc("/admin/config", s.handleConfig)
 	s.mux.HandleFunc("/healthz", s.handleHealth)
 
 	s.mux.Handle("/", s.proxy)
@@ -92,4 +94,15 @@ func (s *Server) handleConfigGet(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/x-yaml")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(out)
+}
+
+func (s *Server) handleConfig(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		s.handleConfigGet(w, r)
+	case http.MethodPost:
+		s.handleConfigUpdate(w, r)
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
 }
