@@ -59,3 +59,26 @@ func decodeYAML(r io.Reader) (Config, error) {
 	}
 	return cfg, nil
 }
+
+func (c Config) Validate() error {
+	if c.ListenAddr == "" {
+		return errors.New("listen_addr is required")
+	}
+	if c.TargetURL == "" {
+		return errors.New("target_url is required")
+	}
+	if c.Chaos.ErrorRate < 0 || c.Chaos.ErrorRate > 1 {
+		return errors.New("chaos.error_rate must be 0.0-1.0")
+	}
+	if c.Chaos.DisconnectRate < 0 || c.Chaos.DisconnectRate > 1 {
+		return errors.New("chaos.disconnect_rate must be 0.0-1.0")
+	}
+	if c.Chaos.LatencyMs < 0 {
+		return errors.New("chaos.latency_ms must be >= 0")
+	}
+	return nil
+}
+
+type Store struct {
+	v atomic.Value
+}
