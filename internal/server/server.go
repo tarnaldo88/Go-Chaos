@@ -26,7 +26,7 @@ func New(cfg *config.Store, log *observability.Logger) *Server {
 		mux: http.NewServeMux(),
 	}
 
-	p, err := proxy.NewReverseProxy(cfg.Get())
+	p, err := proxy.NewReverseProxy(cfg)
 
 	if err != nil {
 		panic(err)

@@ -7,7 +7,12 @@ import (
 	"go-chaos/internal/config"
 )
 
-func NewReverseProxy(cfg config.Config) (*httputil.ReverseProxy, error) {
+type Store interface {
+	Get() config.Config
+}
+
+func NewReverseProxy(store Store) (*httputil.ReverseProxy, error) {
+	cfg := store.Get()
 	target, err := url.Parse(cfg.TargetURL)
 	if err != nil {
 		return nil, err
@@ -16,7 +21,8 @@ func NewReverseProxy(cfg config.Config) (*httputil.ReverseProxy, error) {
 	proxy := httputil.NewSingleHostReverseProxy(target)
 
 	// Transport with sane defaults.
-	proxy.Transport = NewTransport()
+	base := NewTransport()
+	proxy.Transport = NewChaosRoundTripper(base, store)
 
 	return proxy, nil
 }
