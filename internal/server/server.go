@@ -11,12 +11,13 @@ import (
 )
 
 type Server struct {
-	cfg *config.Store
-	log *observability.Logger
-	mux *http.ServeMux
+	cfg   *config.Store
+	log   *observability.Logger
+	mux   *http.ServeMux
+	proxy http.Handler
 }
 
-func New(cfg *config.Store, log *observability.Logger) Server {
+func New(cfg *config.Store, log *observability.Logger) *Server {
 	s := &Server{
 		cfg: cfg,
 		log: log,

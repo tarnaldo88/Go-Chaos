@@ -25,7 +25,7 @@ type ChaosConfig struct {
 func Default() Config {
 	return Config{
 		ListenAddr: ":8080",
-		TargetURL:  "http//localhost:9000",
+		TargetURL:  "http://localhost:9000",
 		Chaos: ChaosConfig{
 			ErrorRate:      0.0,
 			DisconnectRate: 0.0,
