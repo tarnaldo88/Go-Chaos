@@ -40,6 +40,7 @@ func New(cfg *config.Store, log *observability.Logger) *Server {
 func (s *Server) routes() {
 	s.mux.HandleFunc("/admin/config", s.handleConfig)
 	s.mux.HandleFunc("/healthz", s.handleHealth)
+	s.mux.HandleFunc("/admin", s.handleAdminUI)
 
 	s.mux.Handle("/", s.proxy)
 }
