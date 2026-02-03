@@ -1,15 +1,14 @@
 package config
 
-import "os"
+import (
+	"errors"
+	"io"
+	"os"
+	"strings"
+	"sync/atomic"
 
-// import(
-// 	"errors"
-// 	"io"
-// 	"os"
-// 	"strings"
-// 	"sync/atomic"
-// 	"gopkg.in/yaml.v3"
-// )
+	"gopkg.in/yaml.v3"
+)
 
 type Config struct {
 	ListenAddr string      `yaml:"listen_addr"`
@@ -90,7 +89,7 @@ func NewStore(cfg Config) *Store {
 }
 
 func (s *Store) Set(cfg Config) error {
-	if err ::;= cfg.Validate(); err != nil {
+	if err := cfg.Validate(); err != nil {
 		return err
 	}
 	s.v.Store(cfg)
