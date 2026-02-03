@@ -16,7 +16,9 @@ func Middleware(store Store, log *observability.Logger, next http.Handler) http.
 		cfg := store.Get()
 
 		if cfg.Chaos.LatencyMs > 0 {
-			log.Printf("chaos latency=%dms path=%s", cfg.Chaos.LatencyMs, r.URL.Path)
+			if log != nil {
+				log.Printf("chaos latency=%dms path=%s", cfg.Chaos.LatencyMs, r.URL.Path)
+			}
 		}
 
 		// latency
@@ -24,13 +26,17 @@ func Middleware(store Store, log *observability.Logger, next http.Handler) http.
 
 		// error response
 		if MaybeReturnError(cfg, w) {
-			log.Printf("chaos error status=503 path=%s", r.URL.Path)
+			if log != nil {
+				log.Printf("chaos error status=503 path=%s", r.URL.Path)
+			}
 			return
 		}
 
 		// disconnect
 		if MaybeDisconnect(cfg, w) {
-			log.Printf("chaos disconnect path=%s", r.URL.Path)
+			if log != nil {
+				log.Printf("chaos disconnect path=%s", r.URL.Path)
+			}
 			return
 		}
 
