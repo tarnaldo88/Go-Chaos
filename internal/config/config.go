@@ -20,6 +20,8 @@ type ChaosConfig struct {
 	ErrorRate      float64 `yaml:"error_rate"`
 	DisconnectRate float64 `yaml:"disconnect_rate"`
 	LatencyMs      int     `yaml:"latency_ms"`
+	IncludePaths   []string `yaml:"include_paths"`
+	ExcludePaths   []string `yaml:"exclude_paths"`
 }
 
 func Default() Config {
@@ -30,6 +32,8 @@ func Default() Config {
 			ErrorRate:      0.0,
 			DisconnectRate: 0.0,
 			LatencyMs:      0,
+			IncludePaths:   nil,
+			ExcludePaths:   []string{"/healthz", "/admin/"},
 		},
 	}
 }
@@ -74,6 +78,16 @@ func (c Config) Validate() error {
 	}
 	if c.Chaos.LatencyMs < 0 {
 		return errors.New("chaos.latency_ms must be >= 0")
+	}
+	for _, p := range c.Chaos.IncludePaths {
+		if p == "" || p[0] != '/' {
+			return errors.New("chaos.include_paths entries must start with '/'")
+		}
+	}
+	for _, p := range c.Chaos.ExcludePaths {
+		if p == "" || p[0] != '/' {
+			return errors.New("chaos.exclude_paths entries must start with '/'")
+		}
 	}
 	return nil
 }
