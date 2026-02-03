@@ -41,6 +41,7 @@ func (s *Server) routes() {
 	s.mux.HandleFunc("/admin/config", s.handleConfig)
 	s.mux.HandleFunc("/healthz", s.handleHealth)
 	s.mux.HandleFunc("/admin", s.handleAdminUI)
+	s.mux.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("images"))))
 
 	s.mux.Handle("/", s.proxy)
 }

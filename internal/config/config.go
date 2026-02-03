@@ -17,15 +17,15 @@ type Config struct {
 }
 
 type ChaosConfig struct {
-	ErrorRate      float64  `yaml:"error_rate"`
-	DisconnectRate float64  `yaml:"disconnect_rate"`
-	LatencyMs      int      `yaml:"latency_ms"`
-	LatencyMinMs   int      `yaml:"latency_min_ms"`
-	LatencyMaxMs   int      `yaml:"latency_max_ms"`
-	UpstreamTimeoutRate float64 `yaml:"upstream_timeout_rate"`
-	DNSFailureRate      float64 `yaml:"dns_failure_rate"`
-	IncludePaths   []string `yaml:"include_paths"`
-	ExcludePaths   []string `yaml:"exclude_paths"`
+	ErrorRate           float64  `yaml:"error_rate"`
+	DisconnectRate      float64  `yaml:"disconnect_rate"`
+	LatencyMs           int      `yaml:"latency_ms"`
+	LatencyMinMs        int      `yaml:"latency_min_ms"`
+	LatencyMaxMs        int      `yaml:"latency_max_ms"`
+	UpstreamTimeoutRate float64  `yaml:"upstream_timeout_rate"`
+	DNSFailureRate      float64  `yaml:"dns_failure_rate"`
+	IncludePaths        []string `yaml:"include_paths"`
+	ExcludePaths        []string `yaml:"exclude_paths"`
 }
 
 func Default() Config {
@@ -33,15 +33,15 @@ func Default() Config {
 		ListenAddr: ":8080",
 		TargetURL:  "http://localhost:9000",
 		Chaos: ChaosConfig{
-			ErrorRate:      0.0,
-			DisconnectRate: 0.0,
-			LatencyMs:      0,
-			LatencyMinMs:   0,
-			LatencyMaxMs:   0,
+			ErrorRate:           0.0,
+			DisconnectRate:      0.0,
+			LatencyMs:           0,
+			LatencyMinMs:        0,
+			LatencyMaxMs:        0,
 			UpstreamTimeoutRate: 0.0,
 			DNSFailureRate:      0.0,
-			IncludePaths:   nil,
-			ExcludePaths:   []string{"/healthz", "/admin/"},
+			IncludePaths:        nil,
+			ExcludePaths:        []string{"/healthz", "/admin/", "/images/"},
 		},
 	}
 }

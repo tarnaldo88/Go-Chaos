@@ -5,12 +5,14 @@ import "net/http"
 const adminPage = `<!doctype html>
 <html>
 <head>
+  <link rel="icon" href="/images/GoChaosLogo.ico" type="image/x-icon">
+
   <meta charset="utf-8">
   <title>Go Chaos Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
-      --bg: #0f1217;
+      --bg: #0f1710;
       --card: #161b22;
       --muted: #9aa4b2;
       --text: #e6edf3;
@@ -19,6 +21,19 @@ const adminPage = `<!doctype html>
       --danger: #f85149;
       --border: #2d333b;
       --input: #0b0f14;
+	  .header {
+		display: flex;
+		align-items: center;
+		justify-content: left;
+		gap: 12px;
+		margin-bottom: 6px;
+	  }
+	  .logo {
+		width: 216px;
+		height: 216px;
+		object-fit: contain;
+	   }
+
     }
     body {
       margin: 0; padding: 24px;
@@ -74,8 +89,11 @@ const adminPage = `<!doctype html>
   </style>
 </head>
 <body>
-  <h1>Go Chaos Admin</h1>
-  <p>Live update chaos settings without restarting the proxy.</p>
+	<div class="header">
+	<img src="/images/GoChaosLogo.png" alt="Go Chaos" class="logo">
+	<h1>Go Chaos Admin</h1>
+	</div>
+	<p>Live update chaos settings without restarting the proxy.</p>
 
   <div class="grid">
     <div class="card">

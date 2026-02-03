@@ -1,4 +1,5 @@
 # Go Chaos
+![Go Chaos](images/GoChaosLogo.png)
 
 Go Chaos is a reverse proxy that injects controlled failures and latency into HTTP traffic to validate API resilience. It supports live configuration updates, per-route rules, and transport-level failures such as DNS errors and upstream timeouts.
 
