@@ -60,7 +60,7 @@ http://localhost:8080/admin
 http://localhost:8080/healthz
 ```
 
-## Admin UI Screenshot
+## Admin UI
 
 <img src="images/AdminPage.png" alt="Go Chaos Admin Page" width="750">
 
