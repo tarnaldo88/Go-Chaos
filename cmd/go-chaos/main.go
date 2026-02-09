@@ -3,31 +3,24 @@ package main
 import (
 	"flag"
 	"log"
-	"net/http"
-
-	"go-chaos/internal/config"
-	"go-chaos/internal/observability"
-	"go-chaos/internal/server"
+	gochaos "go-chaos"
 )
 
 func main() {
 	configPath := flag.String("config", "config/config.yaml", "path to config file")
 	flag.Parse()
 
-	cfg, err := config.LoadFromFile(*configPath)
+	cfg, err := gochaos.LoadConfigFile(*configPath)
 	if err != nil {
 		log.Fatalf("config load failed: %v", err)
 	}
 
-	store := config.NewStore(cfg)
-	logger := observability.New()
-	srv, err := server.New(store, logger)
+	app, err := gochaos.New(cfg)
 	if err != nil {
 		log.Fatalf("server setup failed: %v", err)
 	}
 
-	log.Printf("listening on %s", cfg.ListenAddr)
-	if err := http.ListenAndServe(cfg.ListenAddr, srv.Handler()); err != nil {
+	if err := app.ListenAndServe(""); err != nil {
 		log.Fatal(err)
 	}
 }
