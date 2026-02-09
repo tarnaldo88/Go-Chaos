@@ -16,7 +16,10 @@ func newTestServer(t *testing.T, cfg config.Config) *httptest.Server {
 	store := config.NewStore(cfg)
 	log := observability.New()
 
-	s := New(store, log)
+	s, err := New(store, log)
+	if err != nil {
+		t.Fatalf("failed to create server: %v", err)
+	}
 	return httptest.NewServer(s.Handler())
 }
 
