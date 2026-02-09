@@ -2,8 +2,8 @@ package main
 
 import (
 	"flag"
-	"log"
 	gochaos "go-chaos"
+	"log"
 )
 
 func main() {
