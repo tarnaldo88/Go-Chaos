@@ -8,12 +8,9 @@ import (
 	"go-chaos/internal/config"
 	"go-chaos/internal/observability"
 	"go-chaos/internal/server"
-	"math/rand"
-	"time"
 )
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
 	configPath := flag.String("config", "config/config.yaml", "path to config file")
 	flag.Parse()
 
@@ -24,7 +21,10 @@ func main() {
 
 	store := config.NewStore(cfg)
 	logger := observability.New()
-	srv := server.New(store, logger)
+	srv, err := server.New(store, logger)
+	if err != nil {
+		log.Fatalf("server setup failed: %v", err)
+	}
 
 	log.Printf("listening on %s", cfg.ListenAddr)
 	if err := http.ListenAndServe(cfg.ListenAddr, srv.Handler()); err != nil {
