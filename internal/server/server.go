@@ -19,7 +19,7 @@ type Server struct {
 	proxy http.Handler
 }
 
-func New(cfg *config.Store, log *observability.Logger) *Server {
+func New(cfg *config.Store, log *observability.Logger) (*Server, error) {
 	s := &Server{
 		cfg: cfg,
 		log: log,
@@ -27,14 +27,13 @@ func New(cfg *config.Store, log *observability.Logger) *Server {
 	}
 
 	p, err := proxy.NewReverseProxy(cfg)
-
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	s.proxy = chaos.Middleware(cfg, log, p)
 
 	s.routes()
-	return s
+	return s, nil
 }
 
 func (s *Server) routes() {
