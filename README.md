@@ -60,6 +60,43 @@ http://localhost:8080/admin
 http://localhost:8080/healthz
 ```
 
+## Use As A Library
+
+You can embed Go Chaos directly in another Go project and run it in-process.
+
+```go
+package main
+
+import (
+  "log"
+
+  gochaos "go-chaos"
+)
+
+func main() {
+  cfg := gochaos.DefaultConfig()
+  cfg.ListenAddr = ":8081"
+  cfg.TargetURL = "http://localhost:9000"
+  cfg.Chaos.ErrorRate = 0.10
+  cfg.Chaos.LatencyMinMs = 100
+  cfg.Chaos.LatencyMaxMs = 300
+
+  app, err := gochaos.New(cfg)
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  log.Fatal(app.ListenAndServe(""))
+}
+```
+
+Useful API:
+- `gochaos.New(cfg)` creates the chaos proxy app
+- `app.Handler()` returns an `http.Handler` for custom server wiring
+- `app.ListenAndServe(addr)` starts a server (`addr == ""` uses `cfg.listen_addr`)
+- `app.UpdateConfig(cfg)` updates config live
+- `app.CurrentConfig()` returns the current config
+
 ## Admin UI
 
 <img src="images/AdminPage.png" alt="Go Chaos Admin Page" width="750">
